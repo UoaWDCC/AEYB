@@ -5,3 +5,7 @@ export interface RoleIdParam {
 export interface UserIdParam {
     userId: string;
 }
+
+export interface GroupIdParam {
+    groupId: string;
+}

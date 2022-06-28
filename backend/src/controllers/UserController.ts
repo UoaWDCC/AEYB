@@ -148,6 +148,7 @@ const getSelf = asyncHandler(async (req: Request<AuthenticatedRequest>, res: Res
 });
 
 /**
+
  * @desc 	Get a specific user
  * @route 	GET /api/users/:userId
  */

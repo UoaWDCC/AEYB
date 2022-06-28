@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
 import UserRouter from '../routes/UserRoutes';
 import RoleRouter from '../routes/RoleRoutes';
+import GroupRouter from '../routes/GroupRoutes';
 import PermissionRouter from '../routes/PermissionRoutes';
 import { Config } from '../types/Config';
 import mongoose from 'mongoose';
@@ -39,6 +40,7 @@ export default class Server {
 
         this._app.use('/api/users', UserRouter);
         this._app.use('/api/roles', RoleRouter);
+        this._app.use('/api/groups', GroupRouter);
         this._app.use('/api/permissions', PermissionRouter);
         console.log('Routers registered');
 
