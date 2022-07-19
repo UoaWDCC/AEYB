@@ -1,0 +1,17 @@
+.loginPageHeader {
+    background-color: antiquewhite;
+    display: flex;
+    flex-direction: column;
+    margin-top: 15%;
+    margin-left: 15%;
+    margin-right: 15%;
+    padding: 5%;
+}
+
+h1 {
+    text-align: center;
+}
+
+.loginBox {
+    justify-content: center;
+}
