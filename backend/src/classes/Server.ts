@@ -5,6 +5,7 @@ import PermissionRouter from '../routes/PermissionRoutes';
 import { Config } from '../types/Config';
 import mongoose from 'mongoose';
 import ErrorHandler from '../middleware/ErrorMiddleware';
+import EventRouter from '../routes/EventRoutes';
 
 export default class Server {
     private _app: Express;
@@ -40,6 +41,7 @@ export default class Server {
         this._app.use('/api/users', UserRouter);
         this._app.use('/api/roles', RoleRouter);
         this._app.use('/api/permissions', PermissionRouter);
+        this._app.use('/api/events', EventRouter);
         console.log('Routers registered');
 
         this._app.use(ErrorHandler); // Use error handler to catch any errors in routes

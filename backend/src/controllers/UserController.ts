@@ -1,12 +1,12 @@
 import asyncHandler from 'express-async-handler';
 import { Request, Response } from 'express';
-import { AuthenticatedRequest, DevLoginRequest, LoginRequest } from '../types/RequestTypes';
+import { DevLoginRequest, LoginRequest } from '../types/RequestTypes';
 import User, { UserModel } from '../models/UserModel';
 import jwt from 'jsonwebtoken';
 import config from '../types/Config';
 import { OAuth2Client } from 'google-auth-library';
 import Permission from '../types/Perm';
-import { Doc, TypedRequestBody } from '../types/UtilTypes';
+import { AuthenticatedRequest, Doc, TypedRequestBody } from '../types/UtilTypes';
 import { UserIdParam } from '../types/RequestParams';
 import { TypedRequest } from '../types/UtilTypes';
 import Role, { RoleModel } from '../models/RoleModel';
@@ -119,7 +119,7 @@ function generateJWT(userId: string): string {
  * @desc 	Get all the users
  * @route 	GET /api/users/
  */
-const getAllUsers = asyncHandler(async (req: Request<AuthenticatedRequest>, res: Response) => {
+const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
     const users = await User.find();
 
     res.status(200).json({
@@ -135,8 +135,8 @@ const getAllUsers = asyncHandler(async (req: Request<AuthenticatedRequest>, res:
  * @desc    Get information about the currently logged in user
  * @route   GET /api/users/@me
  */
-const getSelf = asyncHandler(async (req: Request<AuthenticatedRequest>, res: Response) => {
-    const self = req.params.user;
+const getSelf = asyncHandler(async (req: AuthenticatedRequest, res: Response) => {
+    const self = req.body.requester;
 
     res.status(200).json({
         status: 'success',
@@ -153,6 +153,13 @@ const getSelf = asyncHandler(async (req: Request<AuthenticatedRequest>, res: Res
  */
 const getUser = asyncHandler(async (req: Request<UserIdParam>, res: Response) => {
     const user = await User.findById(req.params.userId);
+    if (!user) {
+        res.status(404).json({
+            status: 'error',
+            message: `There is no user with the id ${req.params.userId}`,
+        });
+        return;
+    }
 
     res.status(200).json({
         status: 'success',

@@ -3,9 +3,9 @@ import asyncHandler from 'express-async-handler';
 import config from '../types/Config';
 import jwt from 'jsonwebtoken';
 import User from '../models/UserModel';
-import { AuthenticatedRequest } from '../types/RequestTypes';
 import Permission from '../types/Perm';
 import { getPermissions } from '../controllers/UserController';
+import { TypedRequest } from '../types/UtilTypes';
 
 type AuthenticationFunction = (req: Request<unknown>, res: Response, next: NextFunction) => void;
 
@@ -46,14 +46,14 @@ export default function protect(permission?: Permission): AuthenticationFunction
                 }
             }
 
-            // Make the user accessible as a param of the request.
-            (req.params as AuthenticatedRequest).user = user;
+            // Make the user accessible in the body of the request.
+            (req as TypedRequest<unknown, unknown>).body.requester = user;
 
             next();
         } catch (error) {
             res.status(401).json({
                 status: 'error',
-                message: 'Something went wrong while authenticating the request',
+                message: 'Something went wrong while authenticating the request: ' + (error as Error).message,
             });
         }
     });
